@@ -22,11 +22,11 @@ module.exports.loginUser = (email, password) => {
 
                         await UserRefreshToken.findOneAndUpdate(
                             {
-                              userId: user._id,
+                                userId: user._id,
                             },
                             { $push: { refreshToken }, isActive: true },
                             { upsert: true }
-                          )
+                        )
 
 
                         return resolve({
@@ -41,11 +41,11 @@ module.exports.loginUser = (email, password) => {
 
 
                     } else {
-                        return reject({ message: "Password is wrong", code: "WrongPassword" })
+                        return resolve({ message: "Password is wrong", code: "Error" })
                     }
                 })
             } else {
-                return reject({ message: "User Not Found", code: "userNotFound" });
+                return resolve({ message: "User Not Found", code: "Error" });
             }
 
 
