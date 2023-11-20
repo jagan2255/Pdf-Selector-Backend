@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 
+//Generating JWT Token
 module.exports.sign = async (user) => {
     const JWT_REFRESH_SECRET = process.env.REFRESH_SECRET
         ? process.env.REFRESH_SECRET
@@ -28,6 +29,7 @@ module.exports.sign = async (user) => {
     });
 };
 
+//Verifying Token is Correct
 module.exports.decode = async (token) => {
     const JWT_SECRET = process.env.ACCESS_SECRET
         ? process.env.ACCESS_SECRET
@@ -42,6 +44,7 @@ module.exports.decode = async (token) => {
     });
 };
 
+//Verifying Refresh Token is Correct
 module.exports.refreshDecode = async (token) => {
     const JWT_REFRESH_SECRET = process.env.REFRESH_SECRET
         ? process.env.REFRESH_SECRET
@@ -55,6 +58,7 @@ module.exports.refreshDecode = async (token) => {
     });
 };
 
+//Generating Refresh Token
 module.exports.refreshSign = async (user) => {
     const JWT_ACCESS_SECRET = process.env.ACCESS_SECRET
         ? process.env.ACCESS_SECRET

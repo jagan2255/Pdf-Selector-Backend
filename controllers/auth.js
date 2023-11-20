@@ -16,7 +16,6 @@ module.exports.loginUser = async (req, res, next) => {
                 })
             );
 
-
         if (!password)
             return next(
                 createError(502, {
@@ -24,7 +23,6 @@ module.exports.loginUser = async (req, res, next) => {
                     code: "passwordRequired",
                 })
             );
-
 
         let data = await authModule.loginUser(email, password);
         return res.status(200).json({ message: data });
@@ -50,7 +48,6 @@ module.exports.signupUser = async (req, res, next) => {
                 })
             );
 
-
         if (!password)
             return next(
                 createError(502, {
@@ -59,8 +56,7 @@ module.exports.signupUser = async (req, res, next) => {
                 })
             );
 
-
-        let data = await authModule.signupUser(email, password,userName);
+        let data = await authModule.signupUser(email, password, userName);
         return res.status(200).json({ message: data });
     } catch (error) {
         res

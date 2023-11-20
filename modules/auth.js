@@ -10,16 +10,15 @@ module.exports.loginUser = (email, password) => {
     return new Promise(async (resolve, reject) => {
 
         try {
-
             const user = await User.findOne({ email: email, isActive: "true" })
-
             if (user) {
 
+                //Using Bycrpt to match Password with Hashed Pasasword
                 bcrypt.compare(password, user.password, async function (err, result) {
                     if (result) {
-
                         let { token, refreshToken } = await sign(user);
 
+                        //Saving Refresh Token to Refresh Token Collection
                         await UserRefreshToken.findOneAndUpdate(
                             {
                                 userId: user._id,
@@ -27,7 +26,6 @@ module.exports.loginUser = (email, password) => {
                             { $push: { refreshToken }, isActive: true },
                             { upsert: true }
                         )
-
 
                         return resolve({
                             user: {
@@ -48,8 +46,6 @@ module.exports.loginUser = (email, password) => {
                 return resolve({ message: "User Not Found", code: "Error" });
             }
 
-
-
         } catch (err) {
             console.log(err)
             return reject({ "message": err, code: "ErrorData" })
@@ -64,7 +60,6 @@ module.exports.signupUser = (email, password, userName) => {
         try {
 
             const user = await User.findOne({ email: email, isActive: true })
-
             if (!user) {
 
                 data = {
@@ -72,10 +67,11 @@ module.exports.signupUser = (email, password, userName) => {
                     userName: userName
                 }
 
+                //Generating Hashed Password Using Bycrpt
                 bcrypt.hash(password, saltRounds, async function (err, hash) {
                     data.password = hash
 
-
+                    //Saving User data to User Collection if user Not Found 
                     await User.create(data).then((res) => {
                         if (res) {
 
@@ -86,27 +82,27 @@ module.exports.signupUser = (email, password, userName) => {
 
                         } else {
 
-                            return reject({
+                            return resolve({
                                 message: "Error in Saving Data",
-                                code: "ErrDataNotSaved"
+                                code: "Error"
                             })
 
                         }
                     }).catch((err) => {
 
-                        return reject({ message: err.message, code: "ERR" })
+                        return resolve({ message: err.message, code: "Error" })
                     })
 
                 })
             } else {
 
-                return reject({ message: "User Already Exists", code: "userAlreadyExist" });
+                return resolve({ message: "User Already Exists", code: "Error" });
             }
 
 
         } catch (err) {
             console.log(err)
-            return reject({ "message": err, code: "ErrorData" })
+            return reject({ "message": err, code: "Error" })
         }
 
     });
